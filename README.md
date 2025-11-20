@@ -55,8 +55,8 @@ npm run dev
 
 Deployed Applications
 
-Frontend: https://majitrack.onrender.com
- (update URL)
+Frontend: [https://majitrack.onrender.com
+ (update URL)](https://maji-track-indol.vercel.app/)
 
 Backend API: https://majitrack-backend.onrender.com/api/readings
 
