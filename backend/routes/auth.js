@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../models/User.js"; // Adjust path if your User.js is in a 'models' folder
+import User from "../models/User.js"; 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
