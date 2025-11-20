@@ -9,6 +9,8 @@ import Reports from "./Reports.jsx";
 import Tips from "./Tips.jsx";
 import Settings from "./Settings.jsx";
 
+const BACKEND_URL = "https://maji-track-backend.onrender.com"; // <- Replace with your Render backend URL
+
 const App = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [darkMode, setDarkMode] = useState(false);
@@ -23,9 +25,10 @@ const App = () => {
     const fetchReadings = async () => {
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:5000/api/readings", {
+        const res = await fetch(`${BACKEND_URL}/api/readings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const data = await res.json();
         setReadings(data.readings || []);
       } catch (err) {
@@ -40,7 +43,7 @@ const App = () => {
   // Add a reading
   const addReading = async (newReading) => {
     try {
-      const res = await fetch("http://localhost:5000/api/readings", {
+      const res = await fetch(`${BACKEND_URL}/api/readings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,6 +51,7 @@ const App = () => {
         },
         body: JSON.stringify(newReading),
       });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const savedReading = await res.json();
       setReadings([...readings, savedReading].sort((a, b) => new Date(a.date) - new Date(b.date)));
     } catch (err) {
@@ -58,10 +62,11 @@ const App = () => {
   // Delete a reading
   const deleteReading = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/readings/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/readings/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
       setReadings(readings.filter((r) => r._id !== id));
     } catch (err) {
       console.error("Failed to delete reading:", err);
