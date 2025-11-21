@@ -9,13 +9,14 @@ import Reports from "./Reports.jsx";
 import Tips from "./Tips.jsx";
 import Settings from "./Settings.jsx";
 
-const BACKEND_URL = "https://maji-track-backend.onrender.com"; // <- Replace with your Render backend URL
+const BACKEND_URL = "https://majitrack.onrender.com";
+ 
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token] = useState(localStorage.getItem("token") || null); // Removed setToken
 
   const [readings, setReadings] = useState([]);
   const [loadingReadings, setLoadingReadings] = useState(true);
