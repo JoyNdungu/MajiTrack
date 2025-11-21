@@ -10,13 +10,12 @@ import Tips from "./Tips.jsx";
 import Settings from "./Settings.jsx";
 
 const BACKEND_URL = "https://majitrack.onrender.com";
- 
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [token] = useState(localStorage.getItem("token") || null); // Removed setToken
+  const [token] = useState(localStorage.getItem("token") || null);
 
   const [readings, setReadings] = useState([]);
   const [loadingReadings, setLoadingReadings] = useState(true);
@@ -24,11 +23,9 @@ const App = () => {
   // Fetch readings from backend
   useEffect(() => {
     const fetchReadings = async () => {
-      if (!token) return;
       try {
-        const res = await fetch(`${BACKEND_URL}/api/readings`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const res = await fetch(`${BACKEND_URL}/api/readings`, { headers });
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const data = await res.json();
         setReadings(data.readings || []);
@@ -48,7 +45,7 @@ const App = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: token ? `Bearer ${token}` : "",
         },
         body: JSON.stringify(newReading),
       });
@@ -65,7 +62,7 @@ const App = () => {
     try {
       const res = await fetch(`${BACKEND_URL}/api/readings/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       setReadings(readings.filter((r) => r._id !== id));
@@ -95,7 +92,6 @@ const App = () => {
 
   return (
     <div className={`flex flex-row min-h-screen relative transition-colors duration-300 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
-      
       {/* Sidebar */}
       <div className="hidden md:block">
         <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} darkMode={darkMode} setDarkMode={setDarkMode} />
